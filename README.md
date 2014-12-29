@@ -1,3 +1,6 @@
+Note: This is a p2pool-fork for Freicoin (FRC) as a parent chain. It can be started by using the net parameter (run_p2pool.py --net freicoin). For mining bitcoin please use to the original p2pool by forestv. 
+-------------------------
+
 Requirements:
 -------------------------
 Generic:
