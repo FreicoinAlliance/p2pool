@@ -43,12 +43,24 @@ def getwork(bitcoind, use_getblocktemplate=False):
         work['height'] = (yield bitcoind.rpc_getblock(work['previousblockhash']))['height'] + 1
     elif p2pool.DEBUG:
         assert work['height'] == (yield bitcoind.rpc_getblock(work['previousblockhash']))['height'] + 1
+
+    fee_list = [x.get('fee', None) if isinstance(x, dict) else None for x in work['transactions']] # for FRC Parent transform unicode fees to int
+    fee_helper = []
+    for fee in fee_list:
+        if isinstance(fee, unicode):
+            float_fee = float(fee)
+            int_fee = int(float_fee * 100000000)
+            fee_helper.append(int_fee)
+        else:
+            fee_helper.append(fee)
+    fee_list = fee_helper
+
     defer.returnValue(dict(
         version=work['version'],
         previous_block=int(work['previousblockhash'], 16),
         transactions=map(bitcoin_data.tx_type.unpack, packed_transactions),
         transaction_hashes=map(bitcoin_data.hash256, packed_transactions),
-        transaction_fees=[x.get('fee', None) if isinstance(x, dict) else None for x in work['transactions']],
+        transaction_fees=fee_list, # for FRC Parent +fee_list
         subsidy=work['coinbasevalue'],
         time=work['time'] if 'time' in work else work['curtime'],
         bits=bitcoin_data.FloatingIntegerType().unpack(work['bits'].decode('hex')[::-1]) if isinstance(work['bits'], (str, unicode)) else bitcoin_data.FloatingInteger(work['bits']),
