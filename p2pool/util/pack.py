@@ -301,42 +301,22 @@ class ComposedType(Type):
             file = type_.write(file, item[key])
         return file
 
-class VersionedType(Type): # added for FRC Parent
-    def __init__(self, fields, version_key=None):
-        if version_key is None: version_key = 'version'
-        self.fields = list(fields) # for new p2pool version change tuple to list
-        self.field_names = set(f[0] for f in fields)
-        self.version_key = fields[0][0]
-
-    def _include_field(self, check, item):
-        if check is False or check is None:
-            return False
-        if check is not True:
-            if callable(check) and not check(item):
-                return False
-            elif item[self.version_key] not in check:
-                return False
-        return True
-
+class VersionedType(Type):
+    def __init__(self, fields):
+        self.fields = list(fields)
+        self.field_names = set(k for k, v in fields)
+        self.record_type = get_record(k for k, v in self.fields)
+    
     def read(self, file):
-        item = {}
-        for field in self.fields:
-            key, type_ = field[0], field[1]
-            check = field[2] if len(field)>=3 else True
-            default = field[3] if len(field)>=4 else None
-            if self._include_field(check, item):
-                item[key], file = type_.read(file)
-            else:
-                item[key] = default
+        item = self.record_type()
+        for key, type_ in self.fields:
+            item[key], file = type_.read(file)
         return item, file
-
+    
     def write(self, file, item):
-        #assert set(item.keys()) == self.field_names, (set(item.keys()) - self.field_names, self.field_names - set(item.keys()))
-        for field in self.fields:
-            key, type_ = field[0], field[1]
-            check = field[2] if len(field)>=3 else True
-            if self._include_field(check, item):
-                file = type_.write(file, item[key])
+        assert set(item.keys()) == self.field_names, (set(item.keys()) - self.field_names, self.field_names - set(item.keys()))
+        for key, type_ in self.fields:
+            file = type_.write(file, item[key])
         return file
 
 class PossiblyNoneType(Type):
