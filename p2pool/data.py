@@ -215,11 +215,8 @@ class Share(object):
             abswork=((previous_share.abswork if previous_share is not None else 0) + bitcoin_data.target_to_average_attempts(bits.target)) % 2**128,
         )
         
-        tx_version = 1 # 5 rows added for FRC Parent
-        ref_height = 0
-        if 'FRC' in net.PARENT.SYMBOL:
-            tx_version = 2
-            ref_height = block_height
+        tx_version = 2 # 5 rows added for FRC Parent
+        ref_height = block_height
         
         gentx = dict(
             version=tx_version, # for FRC Parent +tx_version -1 
@@ -233,7 +230,7 @@ class Share(object):
                 script='\x6a\x28' + cls.get_ref_hash(net, share_info, ref_merkle_link) + pack.IntType(64).pack(last_txout_nonce),
             )],
             lock_time=0,
-            refheight=ref_height if tx_version in set([2]) else 0, # added for FRC as Parent
+            refheight=ref_height
         )
         
         def get_share(header, last_txout_nonce=last_txout_nonce):
@@ -243,7 +240,7 @@ class Share(object):
                 share_info=share_info,
                 ref_merkle_link=dict(branch=[], index=0),
                 last_txout_nonce=last_txout_nonce,
-                hash_link=prefix_to_hash_link(bitcoin_data.tx_type.pack(gentx)[:-32-8-4-(tx_version in set([2]) and 4 or 0)], cls.gentx_before_refhash), # for FRC Parent added -(tx_version in set([2]) and 4 or 0)
+                hash_link=prefix_to_hash_link(bitcoin_data.tx_type.pack(gentx)[:-32-8-4-4], cls.gentx_before_refhash), # for FRC Parent added -(tx_version in set([2]) and 4 or 0)
                 merkle_link=bitcoin_data.calculate_merkle_link([None] + other_transaction_hashes, 0),
             ))
             assert share.header == header # checks merkle_root
