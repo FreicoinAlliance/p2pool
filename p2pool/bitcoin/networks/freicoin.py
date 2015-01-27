@@ -337,7 +337,7 @@ TITHE_FUNC=lambda height: () if height >= 161280 else [({
     317: '1M3wUX9YYrcVSSw6Tncdoic3Fj13okQ63u',
     318: '1PVKsqeVqM4B2ccq915GHeK3aDeruStr24',
     319: '1PKNQqSuPknZ1PaqKkRqa9qYujWKL9KQ7E',
-}[(height*320)//161280], 49603174603)]
+}[(height*320)//161280], 49603174604)]
 POW_FUNC = data.hash256
 BLOCK_PERIOD = 600 # s
 SYMBOL = 'FRC'
