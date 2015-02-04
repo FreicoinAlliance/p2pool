@@ -4,13 +4,14 @@ Note: This is a p2pool-fork for Freicoin (FRC) as a parent chain. It can be star
 Requirements:
 -------------------------
 Generic:
-* Bitcoin >=0.8.5
+* Freicoind >=0.8.5
 * Python >=2.6
 * Twisted >=10.0.0
 * python-argparse (for Python =2.6)
+* python-gmpy
 
 Linux:
-* sudo apt-get install python-zope.interface python-twisted python-twisted-web
+* sudo apt-get install python-zope.interface python-twisted python-twisted-web python-gmpy
 * sudo apt-get install python-argparse # if on Python 2.6
 
 Windows:
@@ -26,7 +27,7 @@ Running P2Pool:
 To use P2Pool, you must be running your own local bitcoind. For standard
 configurations, using P2Pool should be as simple as:
 
-    python run_p2pool.py
+    python run_p2pool.py -net freicoin
 
 Then run your miner program, connecting to 127.0.0.1 on port 9332 with any
 username and password.
