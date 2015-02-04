@@ -6,6 +6,10 @@ from twisted.internet import defer
 from .. import data, helper
 from p2pool.util import pack
 
+import gmpy
+from gmpy import mpq
+
+
 
 P2P_PREFIX = '2cfe7e6d'.decode('hex')
 P2P_PORT = 8639
