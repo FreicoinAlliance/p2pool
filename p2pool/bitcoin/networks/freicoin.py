@@ -347,7 +347,7 @@ BLOCK_PERIOD = 600 # s
 SYMBOL = 'FRC'
 CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Freicoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Freicoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.freicoin'), 'freicoin.conf')
 BLOCK_EXPLORER_URL_PREFIX='http://coinplorer.com/FRC/Blocks/'
-ADDRESS_EXPLORER_URL_PREFIX='http://coinplorer.com/FRC/Addresses'
+ADDRESS_EXPLORER_URL_PREFIX='http://coinplorer.com/FRC/Addresses/'
 TX_EXPLORER_URL_PREFIX = 'https://blockchain.info/Transactions/'
 SANE_TARGET_RANGE=(2**256//2**32 - 1, 2**256//2**32 - 1)
 DUST_THRESHOLD = 0.001e8
